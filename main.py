@@ -47,7 +47,9 @@ def calculate_edge_transition_cost(
             )
 
         _finished_count.value += 1
-        print(f"[{_finished_count.value + 1}/{_total_file_count}] file: {from_file_path}")
+        print(
+            f"[{_finished_count.value + 1}/{_total_file_count}] file: {from_file_path}"
+        )
 
 
 if __name__ == "__main__":
@@ -91,8 +93,8 @@ if __name__ == "__main__":
         if index % 1000 == 0:
             print(f"Processing {index + 1} entries")
         cost_metric = cost_metrics_queue.get()
-        from_file_index = all_models_files.index(cost_metric['from_file_name'])
-        to_file_index = all_models_files.index(cost_metric['to_file_name'])
+        from_file_index = all_models_files.index(cost_metric["from_file_name"])
+        to_file_index = all_models_files.index(cost_metric["to_file_name"])
         cost_metrics[from_file_index, to_file_index] = cost_metric["cost"]
 
     torch.save(cost_metrics, "saved_cost_metrics.pt")
