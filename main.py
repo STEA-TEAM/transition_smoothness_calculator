@@ -48,7 +48,11 @@ if __name__ == "__main__":
             step_count = len(all_models_files) // processes_count
             for index in range(processes_count):
                 start_index = index * step_count
-                end_index = (index + 1) * step_count
+                end_index = (
+                    (index + 1) * step_count
+                    if index < processes_count - 1
+                    else len(all_models_files)
+                )
                 job_list.append(
                     pool.apply_async(
                         calculate_edge_transition_cost,
@@ -62,7 +66,5 @@ if __name__ == "__main__":
             pool.close()
             pool.join()
 
-            cost_list = [job.get() for job in job_list]
-
-            cost_metrics = torch.vstack(cost_list)
-            torch.save(cost_metrics, "saved_cost_metrics.pt")
+    cost_metrics = torch.vstack([job.get() for job in job_list])
+    torch.save(cost_metrics, "cost_metrics.pt")
